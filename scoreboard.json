@@ -1,0 +1,26 @@
+{
+    "global": {
+        "ai_correct": 5,
+        "ai_total": 6,
+        "human_correct": 2,
+        "human_total": 6
+    },
+    "student": {
+        "ai_correct": 1,
+        "ai_total": 2,
+        "human_correct": 0,
+        "human_total": 2
+    },
+    "heart": {
+        "ai_correct": 2,
+        "ai_total": 2,
+        "human_correct": 1,
+        "human_total": 2
+    },
+    "personality": {
+        "ai_correct": 2,
+        "ai_total": 2,
+        "human_correct": 1,
+        "human_total": 2
+    }
+}

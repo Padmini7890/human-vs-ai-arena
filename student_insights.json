@@ -1,0 +1,5 @@
+{
+    "insight_1": "Students with high study hours and internet access passed 60.9% of the time, while students with low study hours and no internet passed 38.2%.",
+    "insight_2": "Students with high attendance and high past exam scores passed 84.8% of the time, whereas students with low attendance and low past scores passed 14.4%.",
+    "insight_3": "When both study hours and attendance were high, pass rate reached 81.3%, but when both were low, pass rate dropped to 17.4%."
+}

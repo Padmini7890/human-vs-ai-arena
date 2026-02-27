@@ -1,0 +1,13 @@
+{
+    "description": {
+        "age": "Age of the patient.",
+        "cp": "Type of chest pain experienced.",
+        "thalach": "Maximum heart rate achieved.",
+        "exang": "Chest pain during exercise (1 = Yes, 0 = No).",
+        "oldpeak": "ST depression indicating heart stress level.",
+        "ca": "Number of major vessels blocked."
+    },
+    "insight_1": "Certain combinations of chest pain type and exercise-induced angina showed disease presence as high as 80.6%, while some combinations showed as low as 10.6%.",
+    "insight_2": "Patients with higher ST depression and more blocked vessels had disease rates up to 86.2%, compared to as low as 5.6% in lower-risk groups.",
+    "insight_3": "When heart rate and ST depression levels were both high-risk, disease occurrence reached 76.3%, whereas low-risk combinations dropped to 18.5%."
+}

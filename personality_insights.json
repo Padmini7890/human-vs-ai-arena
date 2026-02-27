@@ -1,0 +1,13 @@
+{
+    "description": {
+        "Time_spent_Alone": "How many hours a person prefers to spend alone.",
+        "Stage_fear": "Fear of speaking or performing in front of people (Yes/No).",
+        "Social_event_attendance": "How often a person attends social events.",
+        "Going_outside": "How frequently a person goes outside.",
+        "Drained_after_socializing": "Feels tired after social interaction (Yes/No).",
+        "Friends_circle_size": "Number of close friends."
+    },
+    "insight_1": "People who experience stage fear and feel drained after socializing showed introvert tendencies as high as 100.0%, while the opposite pattern dropped to just 5.5%.",
+    "insight_2": "When someone spends a lot of time alone and rarely goes outside, introversion reached 92.0%, compared to only 5.6% in more outgoing lifestyles.",
+    "insight_3": "A smaller friend circle combined with lower social event attendance pushed introversion up to 100.0%, while highly social individuals showed only 0.0% introvert patterns."
+}
