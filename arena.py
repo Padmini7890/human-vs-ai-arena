@@ -11,9 +11,8 @@ import os
 
 st.set_page_config(page_title="Human vs AI Arena", layout="wide")
 
-
 # =====================================================
-# SCOREBOARD SETUP (PERSISTENT)
+# SCOREBOARD (PERSISTENT JSON)
 # =====================================================
 
 SCORE_FILE = "scoreboard.json"
@@ -40,7 +39,7 @@ def calc_accuracy(correct, total):
     return (correct / total * 100) if total > 0 else 0
 
 # =====================================================
-# SESSION STATE FOR QUESTION CONTROL
+# SESSION STATE (QUESTION CONTROL)
 # =====================================================
 
 if "current_question" not in st.session_state:
@@ -75,12 +74,11 @@ if st.session_state.last_dataset != dataset_choice:
 st.divider()
 
 # =====================================================
-# GLOBAL SIDEBAR LEADERBOARD
+# GLOBAL SIDEBAR LEADERBOARD WITH PROGRESS BARS
 # =====================================================
 
 st.sidebar.header("🌍 Overall Leaderboard")
 
-# Calculate accuracy
 ai_acc = calc_accuracy(scores["global"]["ai_correct"], scores["global"]["ai_total"])
 human_acc = calc_accuracy(scores["global"]["human_correct"], scores["global"]["human_total"])
 
@@ -94,6 +92,13 @@ st.sidebar.markdown("### 👥 Human Performance")
 st.sidebar.progress(human_acc / 100)
 st.sidebar.write(f"{scores['global']['human_correct']} / {scores['global']['human_total']}  ({human_acc:.2f}%)")
 
+if ai_acc > human_acc:
+    st.sidebar.success("🤖 AI is Leading!")
+elif human_acc > ai_acc:
+    st.sidebar.success("👥 Humans are Leading!")
+else:
+    st.sidebar.info("It's a Tie!")
+
 st.sidebar.divider()
 
 if st.sidebar.button("🔄 Reset Entire Game"):
@@ -104,10 +109,37 @@ if st.sidebar.button("🔄 Reset Entire Game"):
     st.rerun()
 
 # =====================================================
-# DATASET HANDLER
+# DATASET RUNNER FUNCTION
 # =====================================================
 
-def run_dataset(ds_key, model_file, test_file, target_col, vote_options, label_map):
+def run_dataset(ds_key, model_file, test_file, target_col, vote_options, label_map, insight_file):
+
+    # -------------------------------
+    # Understand the Data First
+    # -------------------------------
+
+    st.subheader("📊 Understand the Data First")
+
+    with open(insight_file, "r") as f:
+        insight_data = json.load(f)
+
+    if "description" in insight_data:
+        for key, value in insight_data["description"].items():
+            st.write(f"**{key}** → {value}")
+
+    if "insight_1" in insight_data:
+        st.markdown(f"- {insight_data['insight_1']}")
+    if "insight_2" in insight_data:
+        st.markdown(f"- {insight_data['insight_2']}")
+    if "insight_3" in insight_data:
+        st.markdown(f"- {insight_data['insight_3']}")
+
+    st.divider()
+    st.subheader("🎯 Prediction Round")
+
+    # -------------------------------
+    # Load Model & Test Data
+    # -------------------------------
 
     model = joblib.load(model_file)
     test_df = pd.read_csv(test_file)
@@ -127,7 +159,9 @@ def run_dataset(ds_key, model_file, test_file, target_col, vote_options, label_m
 
     sample = st.session_state.current_question
 
-    st.dataframe(pd.DataFrame([sample.drop(target_col)]), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame([sample.drop(target_col)]),
+                 use_container_width=True,
+                 hide_index=True)
 
     participants = st.number_input("Number of Participants", 1, 20, 1, key=f"{ds_key}_num")
 
@@ -147,7 +181,7 @@ def run_dataset(ds_key, model_file, test_file, target_col, vote_options, label_m
         pred_label = label_map[prediction]
         actual_label = label_map[actual]
 
-        # AI score
+        # AI update
         scores[ds_key]["ai_total"] += 1
         scores["global"]["ai_total"] += 1
 
@@ -155,7 +189,7 @@ def run_dataset(ds_key, model_file, test_file, target_col, vote_options, label_m
             scores[ds_key]["ai_correct"] += 1
             scores["global"]["ai_correct"] += 1
 
-        # Human score
+        # Human update
         for vote in votes:
             scores[ds_key]["human_total"] += 1
             scores["global"]["human_total"] += 1
@@ -174,9 +208,9 @@ def run_dataset(ds_key, model_file, test_file, target_col, vote_options, label_m
             st.session_state.revealed = False
             st.rerun()
 
-    # ===============================
-    # DATASET SPECIFIC LEADERBOARD
-    # ===============================
+    # -------------------------------
+    # Dataset Leaderboard
+    # -------------------------------
 
     st.divider()
     st.subheader("📊 Dataset Leaderboard")
@@ -195,17 +229,14 @@ def run_dataset(ds_key, model_file, test_file, target_col, vote_options, label_m
 
 if dataset_choice == "Student Performance":
 
-    st.subheader("📚 Understand the Data First")
-    st.markdown('<div class="banner">', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
     run_dataset(
         "student",
         "student_model.pkl",
         "student_test.csv",
         "Pass_Fail",
         ["PASS", "FAIL"],
-        {1: "PASS", 0: "FAIL"}
+        {1: "PASS", 0: "FAIL"},
+        "student_insights.json"
     )
 
 # =====================================================
@@ -214,17 +245,14 @@ if dataset_choice == "Student Performance":
 
 elif dataset_choice == "Heart Disease":
 
-    st.subheader("❤️ Understand the Data First")
-    st.markdown('<div class="banner">', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
     run_dataset(
         "heart",
         "heart_model.pkl",
         "heart_test.csv",
         "target",
         ["Disease", "No Disease"],
-        {1: "Disease", 0: "No Disease"}
+        {1: "Disease", 0: "No Disease"},
+        "heart_insights.json"
     )
 
 # =====================================================
@@ -233,16 +261,12 @@ elif dataset_choice == "Heart Disease":
 
 elif dataset_choice == "Personality Prediction":
 
-    st.subheader("🎭 Understand the Data First")
-    st.markdown('<div class="banner">', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
     run_dataset(
         "personality",
         "personality_model.pkl",
         "personality_test.csv",
         "Personality",
         ["Introvert", "Extrovert"],
-        {1: "Introvert", 0: "Extrovert"}
+        {1: "Introvert", 0: "Extrovert"},
+        "personality_insights.json"
     )
-
