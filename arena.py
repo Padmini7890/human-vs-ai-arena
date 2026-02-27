@@ -211,7 +211,7 @@ if dataset_choice == "Student Performance":
 
     st.subheader("📚 Understand the Data First")
     st.markdown('<div class="banner">', unsafe_allow_html=True)
-    st.image("assets/student_image.png")
+    st.image(os.path.join("assets", "student_image.png"))
     st.markdown('</div>', unsafe_allow_html=True)
 
     run_dataset(
@@ -231,7 +231,7 @@ elif dataset_choice == "Heart Disease":
 
     st.subheader("❤️ Understand the Data First")
     st.markdown('<div class="banner">', unsafe_allow_html=True)
-    st.image("assets/heart_image.jpg")
+    st.image(os.path.join("assets", "heart_image.jpg"))
     st.markdown('</div>', unsafe_allow_html=True)
 
     run_dataset(
@@ -251,7 +251,7 @@ elif dataset_choice == "Personality Prediction":
 
     st.subheader("🎭 Understand the Data First")
     st.markdown('<div class="banner">', unsafe_allow_html=True)
-    st.image("assets/personality_image.jpg")
+    st.image(os.path.join("assets", "personality_image.jpg"))
     st.markdown('</div>', unsafe_allow_html=True)
 
     run_dataset(
